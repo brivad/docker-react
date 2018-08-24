@@ -1,0 +1,16 @@
+FROM node:alpine
+
+WORKDIR '/app'
+
+COPY package.json .
+RUN npm install
+
+# nel dev environment, non è necessario COPY . .
+# il contenuto di /app viene mappato come volume da docker-cli o compose
+# ma in un contesto diverso potrebbe essere comunque utile copiare
+# (sistema diverso da docker compose o altro...)
+# lo lascio qui come reference, non compromette lo sviluppo
+# tanto node_modules non viene mappata (grazie al mapping -v /app/node_modules)
+COPY . .
+
+CMD ["npm", "run", "start"]

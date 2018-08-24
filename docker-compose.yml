@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules # in pratica: non mappare la dir locale con quella del container
+      - .:/app
+  tests: # questo approccio fa partire un servizio per i test, ma anche questo ha alcuni downsides (interattività)
+    build: # in alternativa: lanciare docker exec -it f85a2d953681 npm run test senza usare questo servizio
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ['npm', 'run', 'test']
